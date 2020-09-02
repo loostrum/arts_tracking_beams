@@ -147,7 +147,7 @@ class ARTSFITSReader:
             # set weights, scales, offsets for this part of the frequency band
             for col in ['DAT_WTS', 'DAT_SCL', 'DAT_OFFS']:
                 out.data[col][subintstart:subintstart + nsubint, freq_start:freq_end] = \
-                        handle.data[col][subintstart:subintstart + nsubint, freq_start:freq_end]
+                    handle.data[col][subintstart:subintstart + nsubint, freq_start:freq_end]
             # we need to extract these indices for each subint, each time sample in that subint
             # construct array of all samples that need to be extract from a subint
             for s in range(nsamp):

@@ -275,7 +275,7 @@ def main(args):
 
         tab_indices_all = Parallel(n_jobs=ncpu)(delayed(run_step)(t) for t in
                                                 tqdm.tqdm(times, desc='Generating TAB indices',
-                                                          disable=~args.no_progress_bar)
+                                                          disable=args.no_progress_bar)
                                                 )
         # convert to array
         tab_indices_all = np.array(tab_indices_all)
@@ -327,7 +327,7 @@ def main(args):
     # loop over the sets of TAB indices and process the corresponding subints
     nstep = len(time_steps)
     # ToDo: manually update progress bar to take the size of a step into account
-    for step in tqdm.tqdm(range(nstep), desc='Creating tracking beam', disable=~args.no_progress_bar):
+    for step in tqdm.tqdm(range(nstep), desc='Creating tracking beam', disable=args.no_progress_bar):
         # use rounding even though time steps are integer multiples of tsub, to avoid float errors
         subint_start = int(np.round(time_steps[step] / tsub))
         tabs = tab_indices[step]

@@ -3,6 +3,7 @@
 import os
 import sys
 import logging
+import warnings
 
 import numpy as np
 from astropy.time import Time
@@ -10,6 +11,7 @@ from astropy.io import fits
 from astropy.io.fits.fitsrec import FITS_rec
 from astropy.coordinates import SkyCoord
 import astropy.units as u
+from astropy.io.fits.verify import VerifyWarning
 
 from arts_tracking_beams.constants import NTAB
 
@@ -138,23 +140,26 @@ class ARTSFITSReader:
         nsamp = self.info['nsamp_per_subint']
         ind = np.zeros((nsamp * nbyte_per_subband), dtype=int)
         # load data of each subband
-        for subband, tab in enumerate(tabs):
-            # get the file handle for this tab
-            handle = self.file_handles[tab]['SUBINT']
-            # get indices of frequency chunks to extract
-            freq_start = subband * nbyte_per_subband
-            freq_end = (subband + 1) * nbyte_per_subband
-            # set weights, scales, offsets for this part of the frequency band
-            for col in ['DAT_WTS', 'DAT_SCL', 'DAT_OFFS']:
-                out.data[col][subintstart:subintstart + nsubint, freq_start:freq_end] = \
-                    handle.data[col][subintstart:subintstart + nsubint, freq_start:freq_end]
-            # we need to extract these indices for each subint, each time sample in that subint
-            # construct array of all samples that need to be extract from a subint
-            for s in range(nsamp):
-                # nchan // 8 here indicates the total number of bytes of one time step
-                samp_start = s * (nchan // 8) + freq_start
-                samp_end = s * (nchan // 8) + freq_end
-                ind[s * nbyte_per_subband:(s + 1) * nbyte_per_subband] = np.arange(samp_start, samp_end)
-            # now extract the data
-            out.data['DATA'][subintstart:subintstart + nsubint, ind] = \
-                handle.data['DATA'][subintstart:subintstart + nsubint, ind]
+        # ignore the VerifyWarning that happens because 8 samples are packed into one byte
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', category=VerifyWarning)
+            for subband, tab in enumerate(tabs):
+                # get the file handle for this tab
+                handle = self.file_handles[tab]['SUBINT']
+                # get indices of frequency chunks to extract
+                freq_start = subband * nbyte_per_subband
+                freq_end = (subband + 1) * nbyte_per_subband
+                # set weights, scales, offsets for this part of the frequency band
+                for col in ['DAT_WTS', 'DAT_SCL', 'DAT_OFFS']:
+                    out.data[col][subintstart:subintstart + nsubint, freq_start:freq_end] = \
+                        handle.data[col][subintstart:subintstart + nsubint, freq_start:freq_end]
+                # we need to extract these indices for each subint, each time sample in that subint
+                # construct array of all samples that need to be extract from a subint
+                for s in range(nsamp):
+                    # nchan // 8 here indicates the total number of bytes of one time step
+                    samp_start = s * (nchan // 8) + freq_start
+                    samp_end = s * (nchan // 8) + freq_end
+                    ind[s * nbyte_per_subband:(s + 1) * nbyte_per_subband] = np.arange(samp_start, samp_end)
+                # now extract the data
+                out.data['DATA'][subintstart:subintstart + nsubint, ind] = \
+                    handle.data['DATA'][subintstart:subintstart + nsubint, ind]

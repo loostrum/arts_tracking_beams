@@ -274,7 +274,9 @@ def main(args):
                                 fmin=fmin, bw=bw, nsub=args.nsub).run(t)
 
         tab_indices_all = Parallel(n_jobs=ncpu)(delayed(run_step)(t) for t in
-                                                tqdm.tqdm(times, desc='Generating TAB indices'))
+                                                tqdm.tqdm(times, desc='Generating TAB indices',
+                                                          disable=~args.no_progress_bar)
+                                                )
         # convert to array
         tab_indices_all = np.array(tab_indices_all)
         # only keep the time steps indices where the TAB indices change
@@ -297,7 +299,7 @@ def main(args):
             # get the output file name
             tab_index_file = output_file.replace('.fits', '.txt')
             # store the TAB indices
-            np.savetxt(tab_index_file, np.hstack([time_steps[:, None], tab_indices]),
+            np.savetxt(tab_index_file, np.hstack([time_steps[:, None].to(u.s).value, tab_indices]),
                        fmt="%.3f" + " %02d" * args.nsub)
 
     # now we can start creating the TB from the input FITS files
@@ -325,8 +327,7 @@ def main(args):
     # loop over the sets of TAB indices and process the corresponding subints
     nstep = len(time_steps)
     # ToDo: manually update progress bar to take the size of a step into account
-    # for step in tqdm.tqdm(range(nstep), desc='Creating tracking beam'):
-    for step in range(nstep):
+    for step in tqdm.tqdm(range(nstep), desc='Creating tracking beam', disable=~args.no_progress_bar):
         # use rounding even though time steps are integer multiples of tsub, to avoid float errors
         subint_start = int(np.round(time_steps[step] / tsub))
         tabs = tab_indices[step]
@@ -401,6 +402,8 @@ def main_with_args():
                         help='Number of CPUs to use for parallel operations (Default: all)')
     parser.add_argument('--chunksize', type=int, default=1000,
                         help='Maximum number of subints to load at a time (Default: %(default)s')
+    parser.add_argument('--no_progress_bar', action='store_true',
+                        help='Disable progress bars')
     parser.add_argument('--verbose', action='store_true',
                         help='Enable verbose logging')
 

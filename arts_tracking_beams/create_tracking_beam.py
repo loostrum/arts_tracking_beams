@@ -250,7 +250,7 @@ def main(args):
     if args.load_tab_indices is not None:
         logging.info('Loading TAB indices from disk')
         # load TAB indices from disk
-        tab_index_data = np.loadtxt(args.load_tab_indices)
+        tab_index_data = np.loadtxt(args.load_tab_indices, ndmin=2)
         time_steps = tab_index_data[:, 0] * u.s
         tab_indices = tab_index_data[:, 1:].astype(int)
         # verify max time step is sensible

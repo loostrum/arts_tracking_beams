@@ -187,7 +187,7 @@ def main(args):
         level = logging.DEBUG
     else:
         level = logging.INFO
-    logging.basicConfig(format='%(asctime)s.%(levelname)s.%(name)s: %(message)s', level=level)
+    logging.basicConfig(format='%(asctime)s.%(levelname)s: %(message)s', level=level)
 
     # get source coordinates
     source_coord = get_source_coordinates(args.source, ra=args.ra, dec=args.dec)

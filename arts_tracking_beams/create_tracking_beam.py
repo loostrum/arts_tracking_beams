@@ -143,6 +143,35 @@ def get_ncpu(target_ncpu=None):
     return ncpu
 
 
+def get_subint_chunks(subint_start, nsubint, chunksize):
+    """
+    Split subint range into chunks
+
+    :param subint_start: First subint
+    :param nsubint: Total number of subints
+    :param chunksize: Maximum number of subints to load at a time
+    :return: 2xN array with subint_start and nsubint for each chunk
+    """
+    # if nsubint is smaller than chunksize, there is nothing to do
+    if nsubint <= chunksize:
+        # return as list so one can stil iterate over the output of this function
+        return [[subint_start, nsubint]]
+    # get number of chunks and remainder
+    nchunk, remainder = divmod(nsubint, chunksize)
+    if remainder != 0:
+        # add one to total number of chunks required
+        nchunk += 1
+    # create array of output subint_start
+    subint_start_out = np.arange(nchunk) * chunksize + subint_start
+    # do the same for nsubint
+    nsubint_out = np.ones(nchunk, dtype=int) * chunksize
+    # fix the last element if there was a remainder
+    if remainder != 0:
+        nsubint_out[-1] = remainder
+    # return as 2xN array
+    return np.transpose([subint_start_out, nsubint_out])
+
+
 def main(args):
     """
     The main tracking beam program.
@@ -168,7 +197,12 @@ def main(args):
 
     # get output file name
     if args.output is None:
-        output_file = f''
+        if args.source is not None:
+            src_name_str = args.source.replace(' ', '_')
+            output_file = f'ARTS_{src_name_str}.fits'
+        else:
+            radec_str = source_coord.to_string('hmsdms', sep=':', precision=0).replace(' ', '_')
+            output_file = f'ARTS_{radec_str}.fits'
     else:
         output_file = args.output
 
@@ -208,8 +242,8 @@ def main(args):
     logging.debug(f'Setting TB time resolution to {tb_res.to(u.s)}')
 
     # get all time steps at which to calculate the TAB indices
-    nstep = int((duration // tb_res).value)
-    delta_t = np.arange(nstep) * tb_res
+    ntime = int((duration // tb_res).value)
+    delta_t = np.arange(ntime) * tb_res
     times = tstart + delta_t
 
     # get TAB indices at each time step
@@ -248,12 +282,13 @@ def main(args):
         # then take absolute value and sum over subbands
         # non-zero value means the TAB indices changed with respect to the previous step,
         # so these are the steps we need to keep
+        # ToDo: using this diff method instead of doing all subints one-by-one results in
+        # zero data in the middle and top of the frequency band. To be debugged
         steps = np.nonzero(abs(np.diff(tab_indices_all, axis=0)).sum(axis=1))[0]
         # numpy diff gives the difference with the next element; so add one to get the first changed element
         steps += 1
-        # we always need to keep the first step too, so add it if it is not in yet
-        if steps[0] != 0:
-            steps = np.insert(steps, 0, 0.0)
+        # we always need to keep the first step too
+        steps = np.insert(steps, 0, 0.0)
         # get the time stamps (since obs start) and TAB indices at these steps
         time_steps = delta_t[steps]
         tab_indices = tab_indices_all[steps]
@@ -265,11 +300,65 @@ def main(args):
             np.savetxt(tab_index_file, np.hstack([time_steps[:, None], tab_indices]),
                        fmt="%.3f" + " %02d" * args.nsub)
 
+    # now we can start creating the TB from the input FITS files
+    # first open the files
+    fits_reader.open_files()
+
+    # write the output to TAB00
+    # this does not change the TAB00 file on disk, but anything in the FITS data that is not changed
+    # will have the TAB00 values
+    output_handle = fits_reader.file_handles[0]
+
+    # update output header keys
+    if args.source is None:
+        src_name = ''
+    else:
+        src_name = args.source
+    ra_str, dec_str = source_coord.to_string('hmsdms', sep=':', precision=1).split(' ')
+    output_handle['PRIMARY'].header['RA'] = ra_str
+    output_handle['PRIMARY'].header['DEC'] = dec_str
+    output_handle['PRIMARY'].header['SRC_NAME'] = src_name
+    # update scanlen, as its original value is truncated to 1 decimal place
+    output_handle['PRIMARY'].header['SCANLEN'] = fits_reader.info['duration'].to('second').value
+    output_handle['SUBINT'].header['NAXIS2'] = fits_reader.info['nsubint']
+
+    # loop over the sets of TAB indices and process the corresponding subints
+    nstep = len(time_steps)
+    # ToDo: manually update progress bar to take the size of a step into account
+    # for step in tqdm.tqdm(range(nstep), desc='Creating tracking beam'):
+    for step in range(nstep):
+        # use rounding even though time steps are integer multiples of tsub, to avoid float errors
+        subint_start = int(np.round(time_steps[step] / tsub))
+        tabs = tab_indices[step]
+        # get last time step to load with these tabs
+        # actually this is one step beyond the last step to load, but python ranges
+        # are up to, not up to and including, so this works
+        try:
+            subint_end = int(np.round((time_steps[step + 1] / tsub)))
+        except IndexError:
+            # past the end of the array, use the end of the observation
+            subint_end = fits_reader.info['nsubint']
+        nsubint_to_load = subint_end - subint_start
+        if subint_start == subint_end:
+            print(time_steps[step] / tsub, time_steps[step + 1] / tsub)
+            exit()
+        # split into chunks as needed and loop over them
+        for start, num in get_subint_chunks(subint_start, nsubint_to_load, args.chunksize):
+            # read the data and put into the TAB00 memory
+            fits_reader.read_tabs_to_buffer(start, num, tabs, output_handle['SUBINT'])
+
+    # create the output file
+    output_handle.writeto(output_file, overwrite=args.overwrite)
+    output_handle.close()
+    # close the input files
+    fits_reader.close_files()
+    logging.info('Done')
+
 
 def main_with_args():
     parser = argparse.ArgumentParser(description='Create a tracking beam from ARTS tied-array beam data. '
-                                                 'Example: arts_create_tracking_beam --input_folder /data/fits --source '
-                                                 '"PSR J2215+1538" '
+                                                 'Example: arts_create_tracking_beam --input_folder /data/fits '
+                                                 '--source "PSR J2215+1538"'
                                      )
 
     parser.add_argument('--input_folder', required=True,
@@ -280,9 +369,10 @@ def main_with_args():
     parser.add_argument('--cb', type=int,
                         help='CB index of input data (required if multiple CBs of the same observation are '
                              'present in the input folder')
-    parser.add_argument('--output', required=True,
-                        help='Path to output FITS file (Default: ARTS_<RA>_<Dec>.fits,'
-                             'where <RA> and <Dec> are the tracking beam coordinates in hh:mm:ss and '
+    parser.add_argument('--output',
+                        help='Path to output FITS file (Default: ARTS_<source name>.fits '
+                             'or ARTS_<RA>_<Dec>.fits if source name is not provided, where '
+                             '<RA> and <Dec> are the tracking beam coordinates in hh:mm:ss and '
                              'dd:mm:ss format, respectively)')
     parser.add_argument('--overwrite', action='store_true',
                         help='Overwrite output file if it already exists')
@@ -306,9 +396,7 @@ def main_with_args():
                              '(Default: generate TAB indices automatically)')
     parser.add_argument('--no_fits_output', action='store_true',
                         help='Do not create FITS output file, but only calculate TAB indices. This option'
-                             'can only be used if save_tab_indices is true. Note that providing the output'
-                             'FITS file name is still required, as it is used to determine the file name of the '
-                             'TAB index file.')
+                             'can only be used if save_tab_indices is true.')
     parser.add_argument('--ncpu', type=int,
                         help='Number of CPUs to use for parallel operations (Default: all)')
     parser.add_argument('--chunksize', type=int, default=1000,

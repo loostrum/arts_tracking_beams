@@ -19,7 +19,7 @@ def radec_to_hadec(ra, dec, t):
 
     # Convert time to Time object if given as string
     if isinstance(t, str):
-       t = Time(t)
+        t = Time(t)
 
     coord = SkyCoord(ra, dec, frame='icrs', obstime=t)
     ha = WSRT_LOC.lon - coord.itrs.spherical.lon

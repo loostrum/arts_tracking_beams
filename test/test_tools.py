@@ -2,16 +2,17 @@
 
 import unittest
 import astropy.units as u
-from astropy.time import Time
 import numpy as np
 
 from arts_tracking_beams import tools
-from arts_tracking_beams.constants import WSRT_LOC
 
 
 class TestTools(unittest.TestCase):
 
     def test_radec_hadec(self):
+        """
+        Test conversion from RADEC to HADEC and back
+        """
         ra0 = 180 * u.deg
         dec0 = 30 * u.deg
         # give time as string to test conversion to Time instance

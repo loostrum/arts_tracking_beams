@@ -10,7 +10,7 @@ from arts_tracking_beams.constants import WSRT_LOC, ARRAY_ITRF, DISH_ITRF, NTAB,
 
 class TrackingBeam:
 
-    def __init__(self, ra, dec, ra_src, dec_src, fmin=1220 * u.MHz, bw=300 * u.MHz, nsub=32):
+    def __init__(self, ra, dec, ra_src, dec_src, fmin=1220 * u.MHz, bw=300 * u.MHz, nsub=48):
         self.ra0 = ra
         self.dec0 = dec
         self.ra0_src = ra_src

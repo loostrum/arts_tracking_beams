@@ -14,7 +14,8 @@ class TestTools(unittest.TestCase):
     def test_radec_hadec(self):
         ra0 = 180 * u.deg
         dec0 = 30 * u.deg
-        t = Time('2020-01-01T12:00:00')
+        # give time as string to test conversion to Time instance
+        t = '2020-01-01T12:00:00'
         # convert RADEC to HADEC and back, check if values are equal
         ha, dec = tools.radec_to_hadec(ra0, dec0, t)
         ra1, dec1 = tools.hadec_to_radec(ha, dec, t)

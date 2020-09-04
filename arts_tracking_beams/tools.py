@@ -2,6 +2,7 @@
 
 from astropy.coordinates import SkyCoord, SphericalRepresentation
 import astropy.units as u
+from astropy.time import Time
 
 from arts_tracking_beams.constants import WSRT_LOC
 
@@ -12,9 +13,14 @@ def radec_to_hadec(ra, dec, t):
 
     :param Quantity ra: Right ascension
     :param Quantity dec: Declination
-    :param Time t: Observing time
+    :param Time/str t: Observing time
     :return: HA (Quantity), Dec (Quantity)
     """
+
+    # Convert time to Time object if given as string
+    if isinstance(t, str):
+       t = Time(t)
+
     coord = SkyCoord(ra, dec, frame='icrs', obstime=t)
     ha = WSRT_LOC.lon - coord.itrs.spherical.lon
     ha.wrap_at(12 * u.hourangle, inplace=True)
@@ -29,8 +35,7 @@ def hadec_to_radec(ha, dec, t):
 
     :param ha: hour angle with unit
     :param dec: declination with unit
-    :param t: UT time (string or astropy.time.Time)
-    :param lon: Longitude with unit (default: WSRT)
+    :param Time/str t: Observing time
     :return: SkyCoord object of J2000 coordinates
     """
 

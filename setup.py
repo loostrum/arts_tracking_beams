@@ -4,6 +4,10 @@ import os
 from setuptools import setup, find_packages
 
 
+with open('README.md') as f:
+    readme = f.read()
+
+
 with open(os.path.join('arts_tracking_beams', '__version__.py')) as version_file:
     version = {}
     exec(version_file.read(), version)
@@ -13,10 +17,12 @@ with open(os.path.join('arts_tracking_beams', '__version__.py')) as version_file
 setup(name='arts_tracking_beams',
       version=project_version,
       description='Create a tracking beam from ARTS tied-array beam data',
+      long_description=readme,
+      long_description_content_type='text/markdown',
       url='http://github.com/loostrum/arts_tracking_beams',
       author='Leon Oostrum',
       author_email='oostrum@astron.nl',
-      license="Apache Software License 2.0",
+      license='Apache Software License 2.0',
       packages=find_packages(),
       zip_safe=False,
       install_requires=['numpy',

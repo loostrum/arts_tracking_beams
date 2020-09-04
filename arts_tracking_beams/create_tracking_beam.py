@@ -206,7 +206,7 @@ def main(args):
         output_file = args.output
 
     # check if output file already exists
-    if os.path.isfile(output_file) and not args.overwrite:
+    if os.path.isfile(output_file) and not args.overwrite and not args.no_fits_output:
         logging.error(f'Output file already exists: {output_file}. Use --overwrite to overwrite.')
         sys.exit(1)
 
@@ -242,6 +242,9 @@ def main(args):
 
     # get all time steps at which to calculate the TAB indices
     ntime = int((duration // tb_res).value)
+    # if duration < tb_res, ntime is zero but we still want one timestep
+    if ntime == 0:
+        ntime = 1
     delta_t = np.arange(ntime) * tb_res
     times = tstart + delta_t
 
@@ -256,11 +259,13 @@ def main(args):
         if time_steps.max() > delta_t.max():
             logging.error(f'Found time step ({time_steps.max()}) beyond end of '
                           f'observation ({delta_t.max()}) in TAB index file')
+            fits_reader.close_files()
             sys.exit(1)
         # verify number of TABs matches number of subbands
         if tab_indices.shape[1] != args.nsub:
             logging.error(f'Number of subbands in TAB index file ({tab_indices.shape[1]}) does '
                           f'not match given nsub ({args.nsub})')
+            fits_reader.close_files()
             sys.exit(1)
     else:
         # calculate TAB indices
@@ -285,11 +290,15 @@ def main(args):
         # so these are the steps we need to keep
         # ToDo: using this diff method instead of doing all subints one-by-one results in
         # zero data in the middle and top of the frequency band. To be debugged
-        steps = np.nonzero(abs(np.diff(tab_indices_all, axis=0)).sum(axis=1))[0]
-        # numpy diff gives the difference with the next element; so add one to get the first changed element
-        steps += 1
+        # exceptional case if there is only one timestep, then there are no diffs
+        if ntime == 1:
+            steps = np.array([], dtype=int)
+        else:  # pragma: no cover  (because test files have one subint)
+            steps = np.nonzero(abs(np.diff(tab_indices_all, axis=0)).sum(axis=1))[0]
+            # numpy diff gives the difference with the next element; so add one to get the first changed element
+            steps += 1
         # we always need to keep the first step too
-        steps = np.insert(steps, 0, 0.0)
+        steps = np.insert(steps, 0, 0)
         # get the time stamps (since obs start) and TAB indices at these steps
         time_steps = delta_t[steps]
         tab_indices = tab_indices_all[steps]
@@ -298,6 +307,7 @@ def main(args):
             # get the output file name
             tab_index_file = output_file.replace('.fits', '.txt')
             # store the TAB indices
+            logging.debug(f'Saving TAB indices to {tab_index_file}')
             np.savetxt(tab_index_file, np.hstack([time_steps[:, None].to(u.s).value, tab_indices]),
                        fmt="%.3f" + " %02d" * args.nsub)
 
@@ -339,16 +349,14 @@ def main(args):
             # past the end of the array, use the end of the observation
             subint_end = fits_reader.info['nsubint']
         nsubint_to_load = subint_end - subint_start
-        if subint_start == subint_end:
-            print(time_steps[step] / tsub, time_steps[step + 1] / tsub)
-            exit()
         # split into chunks as needed and loop over them
         for start, num in get_subint_chunks(subint_start, nsubint_to_load, args.chunksize):
             # read the data and put into the TAB00 memory
             fits_reader.read_tabs_to_buffer(start, num, tabs, output_handle['SUBINT'])
 
     # create the output file
-    output_handle.writeto(output_file, overwrite=args.overwrite)
+    if not args.no_fits_output:
+        output_handle.writeto(output_file, overwrite=args.overwrite)
     output_handle.close()
     # close the input files
     fits_reader.close_files()
@@ -408,7 +416,3 @@ def main_with_args():
 
     args = parser.parse_args()
     main(args)
-
-
-if __name__ == '__main__':
-    main_with_args()

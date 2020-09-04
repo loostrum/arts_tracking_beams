@@ -12,9 +12,6 @@ from arts_tracking_beams.constants import NTAB
 class TestTrackingBeam(unittest.TestCase):
 
     def test_source_pointing(self):
-        """
-        An on-source pointing should only use TAB00
-        """
         ra = 180 * u.deg
         dec = 30 * u.deg
         nsub = 48
@@ -26,9 +23,6 @@ class TestTrackingBeam(unittest.TestCase):
             self.assertListEqual(tabs.tolist(), expected_tabs)
 
     def test_all_tabs(self):
-        """
-        A 12-hour pointing should use all TABs
-        """
         ra = 180 * u.deg
         dec = 30 * u.deg
         ra_src = ra
@@ -41,9 +35,6 @@ class TestTrackingBeam(unittest.TestCase):
             self.assertIn(tab, tabs)
 
     def test_freqs(self):
-        """
-        A source far away from the beam centre should use all TABs across frequency
-        """
         ra = 180 * u.deg
         dec = 30 * u.deg
         ra_src = ra + 3 * u.deg

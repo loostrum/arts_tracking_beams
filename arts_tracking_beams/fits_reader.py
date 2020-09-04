@@ -135,7 +135,8 @@ class ARTSFITSReader:
         if not (nchan // nsub) % 8 == 0:
             self.logger.error(f"Number of channels per subband must be a multiple of 8")
             sys.exit(1)
-        nbyte_per_subband = (nchan // nsub) // 8
+        nchan_per_subband = (nchan // nsub)
+        nbyte_per_subband = nchan_per_subband // 8
 
         nsamp = self.info['nsamp_per_subint']
         ind = np.zeros((nsamp * nbyte_per_subband), dtype=int)
@@ -147,18 +148,23 @@ class ARTSFITSReader:
                 # get the file handle for this tab
                 handle = self.file_handles[tab]['SUBINT']
                 # get indices of frequency chunks to extract
-                freq_start = subband * nbyte_per_subband
-                freq_end = (subband + 1) * nbyte_per_subband
+                freq_start = subband * nchan_per_subband
+                freq_end = (subband + 1) * nchan_per_subband
+                # the same in bytes
+                freq_byte_start = subband * nbyte_per_subband
+                freq_byte_end = (subband + 1) * nbyte_per_subband
                 # set weights, scales, offsets for this part of the frequency band
                 for col in ['DAT_WTS', 'DAT_SCL', 'DAT_OFFS']:
+                    # here use normal frequency indices
                     out.data[col][subintstart:subintstart + nsubint, freq_start:freq_end] = \
                         handle.data[col][subintstart:subintstart + nsubint, freq_start:freq_end]
                 # we need to extract these indices for each subint, each time sample in that subint
                 # construct array of all samples that need to be extract from a subint
                 for s in range(nsamp):
                     # nchan // 8 here indicates the total number of bytes of one time step
-                    samp_start = s * (nchan // 8) + freq_start
-                    samp_end = s * (nchan // 8) + freq_end
+                    # use byte indices for frequency as this these are packed data
+                    samp_start = s * (nchan // 8) + freq_byte_start
+                    samp_end = s * (nchan // 8) + freq_byte_end
                     ind[s * nbyte_per_subband:(s + 1) * nbyte_per_subband] = np.arange(samp_start, samp_end)
                 # now extract the data
                 out.data['DATA'][subintstart:subintstart + nsubint, ind] = \

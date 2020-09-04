@@ -10,9 +10,6 @@ from arts_tracking_beams import tools
 class TestTools(unittest.TestCase):
 
     def test_radec_hadec(self):
-        """
-        Test conversion from RADEC to HADEC and back
-        """
         ra0 = 180 * u.deg
         dec0 = 30 * u.deg
         # give time as string to test conversion to Time instance

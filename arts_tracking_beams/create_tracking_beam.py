@@ -408,7 +408,3 @@ def main_with_args():
 
     args = parser.parse_args()
     main(args)
-
-
-if __name__ == '__main__':
-    main_with_args()

@@ -30,13 +30,12 @@ def get_input_path(input_folder, taskid=None, cb=None):
     :return: file path formatted as <path>/ARTS<taskid>_CB<cb>_{tab:02d}.fits
     """
     # construct glob pattern
+    pattern = f'{input_folder}/ARTS'
     if taskid is not None:
-        if cb is not None:
-            pattern = f'{input_folder}/ARTS{taskid}_CB{cb:02d}*.fits'
-        else:
-            pattern = f'{input_folder}/ARTS{taskid}*.fits'
-    else:
-        pattern = f'{input_folder}/*.fits'
+        pattern += f'{taskid}'
+    if cb is not None:
+        pattern += f'*CB{cb:02d}'
+    pattern += '*.fits'
 
     # get list of files
     files = glob.glob(pattern)
@@ -46,7 +45,7 @@ def get_input_path(input_folder, taskid=None, cb=None):
 
     # there should be one file per TAB
     if not len(files) == NTAB:
-        logging.error(f'Expected {NTAB} files but found only {len(files)}')
+        logging.error(f'Expected {NTAB} files but found {len(files)}')
         sys.exit(1)
 
     # construct the file path with formatter for TAB index

@@ -28,7 +28,45 @@ class TestCreateTrackingBeam(unittest.TestCase):
     def tearDown(self):
         # remove the test files
         for f in self.files:
-            os.remove(f)
+            try:
+                os.remove(f)
+            except FileNotFoundError:
+                pass
+        for f in ['out.fits', 'out.txt', 'ARTS_PSR_B0531+21.txt', 'tab_tmp.txt']:
+            try:
+                os.remove(f)
+            except FileNotFoundError:
+                pass
+
+    @staticmethod
+    def get_args(switched=False):
+        root = os.path.abspath(os.path.dirname(__file__))
+        args = {'input_folder': f'{root}/data',
+                'taskid': None,
+                'cb': None,
+                'output': 'out.fits',
+                'overwrite': False,
+                'source': 'PSR B0531+21',
+                'ra': None,
+                'dec': None,
+                'nsub': 48,
+                'save_tab_indices': True,
+                'load_tab_indices': None,
+                'no_fits_output': False,
+                'ncpu': 1,
+                'chunksize': 1000,
+                'no_progress_bar': False,
+                'verbose': False}
+        args_switched = {'overwrite': True,
+                         'source': None,
+                         'ra': '12:00:00.0',
+                         'dec': '00:00:00.0',
+                         'save_tab_indices': False,
+                         'load_tab_indices': 'out.txt',
+                         'verbose': True}
+        if switched:
+            args.update(args_switched)
+        return args
 
     def test_get_input_path(self):
         func = create_tracking_beam.get_input_path
@@ -119,7 +157,45 @@ class TestCreateTrackingBeam(unittest.TestCase):
         self.assertTrue(hasattr(args[0], 'input_folder'))
         self.assertTrue(args[0].input_folder == folder)
 
-    # ToDo: test main
+    def test_main(self):
+        args = self.get_args()
+        create_tracking_beam.main(args)
+        # check if output files exist
+        self.assertTrue(os.path.isfile(args['output']))
+        self.assertTrue(os.path.isfile(args['output'].replace('.fits', '.txt')))
+
+        with self.assertRaises(SystemExit):
+            # output already exists so gives error
+            create_tracking_beam.main(args)
+
+        # let script figure out output name, but don't save the FITS file
+        args['output'] = None
+        args['no_fits_output'] = True
+        create_tracking_beam.main(args)
+
+        # get another set of args with switched flags and enabled output overwrite
+        args = self.get_args(switched=True)
+        create_tracking_beam.main(args)
+
+        # let script figure out output name from RA, Dec
+        args['output'] = None
+        args['no_fits_output'] = True
+        create_tracking_beam.main(args)
+
+        # test load from disk with errors in the file
+        tab_file = 'tab_tmp.txt'
+        args['load_tab_indices'] = tab_file
+        with open(tab_file, 'w') as f:
+            # write line with too high time stamp
+            f.write('999999.9 0')
+        with self.assertRaises(SystemExit):
+            create_tracking_beam.main(args)
+
+        # repeat with incorrect number of subbands (run uses 48)
+        with open(tab_file, 'w') as f:
+            f.write('0 0 1 2')
+        with self.assertRaises(SystemExit):
+            create_tracking_beam.main(args)
 
 
 if __name__ == '__main__':

@@ -6,7 +6,7 @@ dist:
 python:
   - 3.6
   - 3.7
-  - 3.8
+  - 3.8-dev  # tests fail on 3.8.0 (default), but succeed on 3.8.5
 install:
   - pip install pycodestyle pytest pytest-cov codecov
   - pip install .
@@ -15,8 +15,3 @@ script:
   - find . -name "*.py" -exec pycodestyle --ignore E501,W503 {} +
 after_success:
   - codecov
-
-jobs:
-    # allow python 3.8 to fail until we figure out why tests fail on 3.8
-    allow_failures:
-      - python: 3.8

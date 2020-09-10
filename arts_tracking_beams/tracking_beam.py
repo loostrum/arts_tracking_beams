@@ -40,7 +40,7 @@ class TrackingBeam:
         elif isinstance(t, Time):
             # if created with Time, the input could be a single Time instances with multiple values, check
             # with Time.value
-            if hasattr(t.value, '__len__'):
+            if isinstance(t.value, np.ndarray):
                 self.time_is_array = True
         if self.time_is_array:
             self.ntime = len(t)
@@ -127,5 +127,5 @@ class TrackingBeam:
         # get TAB index in range [0, NTAB)
         if self.time_is_array:
             # add extra axis so output shape is ntime, nsub
-            pointing_shift_per_tab = pointing_shift_per_tab[:, None]
+            x_src = x_src[:, None]
         return np.round((x_src / pointing_shift_per_tab).to(1).value).astype(int) % NTAB

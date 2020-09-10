@@ -5,7 +5,6 @@ import sys
 import glob
 import argparse
 import logging
-from joblib import Parallel, delayed
 
 import numpy as np
 from astropy.coordinates import SkyCoord
@@ -119,27 +118,6 @@ def required_tb_resolution(pointing, tstart, duration, fhi):
 
     logging.debug(f'Required TB time resolution: {tb_res.to(u.s):.1f}')
     return tb_res.to(u.s)
-
-
-def get_ncpu(target_ncpu=None):
-    """
-    Set number of CPUs to use for Parallel operations
-
-    :param int target_ncpu: Requested number of CPUs (Default: all)
-    :return: number of CPUs to use (int)
-    """
-    ncpu_sys = os.cpu_count()
-    if target_ncpu is None:
-        ncpu = ncpu_sys
-    else:
-        if target_ncpu > ncpu_sys:
-            logging.warning(f'Number of CPUs requested ({target_ncpu}) is larger than available number of CPUs '
-                            f'({ncpu_sys}), setting to {ncpu_sys}')
-            ncpu = ncpu_sys
-        else:
-            ncpu = target_ncpu
-    logging.debug(f'Setting number of CPUs to {ncpu}')
-    return ncpu
 
 
 def get_subint_chunks(subint_start, nsubint, chunksize):
@@ -269,27 +247,15 @@ def main(args):
             sys.exit(1)
     else:
         # calculate TAB indices
-        # get number of CPUs to use
-        ncpu = get_ncpu(args.ncpu)
-
-        # just to make the parallel step a bit clearer, define the function to run first
-        def run_step(t):
-            return TrackingBeam(pointing.ra, pointing.dec, source_coord.ra, source_coord.dec,
-                                fmin=fmin, bw=bw, nsub=args.nsub).run(t)
-
-        tab_indices_all = Parallel(n_jobs=ncpu)(delayed(run_step)(t) for t in
-                                                tqdm.tqdm(times, desc='Generating TAB indices',
-                                                          disable=args.no_progress_bar)
-                                                )
-        # convert to array
-        tab_indices_all = np.array(tab_indices_all)
+        logging.info('Calculating TAB indices')
+        TB = TrackingBeam(pointing.ra, pointing.dec, source_coord.ra, source_coord.dec,
+                          fmin=fmin, bw=bw, nsub=args.nsub)
+        tab_indices_all = TB.run(times)
         # only keep the time steps indices where the TAB indices change
         # first find whether or not a TAB index changed for each subband
         # then take absolute value and sum over subbands
         # non-zero value means the TAB indices changed with respect to the previous step,
-        # so these are the steps we need to keep
-        # ToDo: using this diff method instead of doing all subints one-by-one results in
-        # zero data in the middle and top of the frequency band. To be debugged
+        # so these are the steps we need to keep.
         # exceptional case if there is only one timestep, then there are no diffs
         if ntime == 1:
             steps = np.array([], dtype=int)
@@ -310,6 +276,10 @@ def main(args):
             logging.debug(f'Saving TAB indices to {tab_index_file}')
             np.savetxt(tab_index_file, np.hstack([time_steps[:, None].to(u.s).value, tab_indices]),
                        fmt="%.3f" + " %02d" * args.nsub)
+
+    if args.no_fits_output:
+        logging.info('Done')
+        return
 
     # now we can start creating the TB from the input FITS files
     # first open the files
@@ -355,8 +325,7 @@ def main(args):
             fits_reader.read_tabs_to_buffer(start, num, tabs, output_handle['SUBINT'])
 
     # create the output file
-    if not args.no_fits_output:
-        output_handle.writeto(output_file, overwrite=args.overwrite)
+    output_handle.writeto(output_file, overwrite=args.overwrite)
     output_handle.close()
     # close the input files
     fits_reader.close_files()
@@ -405,8 +374,6 @@ def main_with_args():
     parser.add_argument('--no_fits_output', action='store_true',
                         help='Do not create FITS output file, but only calculate TAB indices. This option'
                              'can only be used if save_tab_indices is true.')
-    parser.add_argument('--ncpu', type=int,
-                        help='Number of CPUs to use for parallel operations (Default: all)')
     parser.add_argument('--chunksize', type=int, default=1000,
                         help='Maximum number of subints to load at a time (Default: %(default)s')
     parser.add_argument('--no_progress_bar', action='store_true',

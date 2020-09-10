@@ -13,7 +13,6 @@ on the sky over the course of an observation.
 * numpy
 * astropy
 * tqdm
-* joblib
 
 ## Installation
 To install the latest release:
@@ -54,10 +53,8 @@ The TB creation consists of two steps:
 1. Calculate the required TABs at each frequency and time
 2. Reorder the data from the input TAB FITS files and create a new FITS file containing the TB.
 
-Step 1 is slowest, and uses multiple CPU cores to speed up the calculation. By default, the script will use all 
-available CPU cores. To specify the number of cores to use manually, use `--ncpu`. The results of this step can be 
-saved to disk with `--save_tab_indices`. To only calculate the TAB indices and disable step 2 completely, use 
-`--no_fits_output`. 
+The results of step 1 can be saved to disk with `--save_tab_indices`. To only calculate the TAB indices and 
+disable step 2 completely, use `--no_fits_output`. 
 To generate the FITS output from a TAB indices file on disk, use`--load_tab_indices /path/to/tab/index/file.txt`.
 The script then loads the TAB indices and immediately goes to step 2.
 

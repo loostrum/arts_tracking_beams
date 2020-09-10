@@ -53,7 +53,6 @@ class TestCreateTrackingBeam(unittest.TestCase):
                 'save_tab_indices': True,
                 'load_tab_indices': None,
                 'no_fits_output': False,
-                'ncpu': 1,
                 'chunksize': 1000,
                 'no_progress_bar': False,
                 'verbose': False}
@@ -106,15 +105,6 @@ class TestCreateTrackingBeam(unittest.TestCase):
         durations = [1 * u.s, 12 * u.hour]
         for d in durations:
             func(pointing, t, duration=d, fhi=1520 * u.MHz)
-
-    def test_get_ncpu(self):
-        func = create_tracking_beam.get_ncpu
-        # no ncpu given
-        self.assertEqual(func(), os.cpu_count())
-        # too many cpus
-        self.assertEqual(func(9999), os.cpu_count())
-        # valid amount
-        self.assertEqual(func(1), 1)
 
     def test_get_subint_chunks(self):
         func = create_tracking_beam.get_subint_chunks

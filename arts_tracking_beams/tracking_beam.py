@@ -20,6 +20,9 @@ class TrackingBeam:
         df_sub = bw / nsub
         self.f_sub = fmin + df_sub / 2 + np.arange(nsub) * df_sub
 
+        # set XYZ baselines
+        self.baselines = self._get_baselines()
+
     def run(self, t):
         """
         Calculate the TAB indices for given time stamp
@@ -31,8 +34,6 @@ class TrackingBeam:
         # get HA, Dec coordinates of phase center and source
         self.ha, self.dec = radec_to_hadec(self.ra0, self.dec0, t)
         self.ha_src, self.dec_src = radec_to_hadec(self.ra0_src, self.dec0_src, t)
-        # get XYZ baselines
-        self.baselines = self._get_baselines()
         # get UVW coordinates
         self.uvw = self._get_lambda_uvw()
         # get TAB rotation and projection

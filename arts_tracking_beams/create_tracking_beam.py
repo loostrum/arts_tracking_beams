@@ -394,7 +394,7 @@ def main_with_args():
                         help='Declination of tracking beam in dd:mm:ss.s format '
                              '(ignored if source argument is specified)')
     parser.add_argument('--nsub', type=int, default=48,
-                        help='Number of subbands to use, where each subband consists of a single TAB. The number'
+                        help='Number of subbands to use, where each subband consists of a single TAB. The number '
                              'of channels per subband must be a multiple of 8 (Default: %(default)s)')
     parser.add_argument('--save_tab_indices', action='store_true',
                         help='Store the TAB indices used to create the TB to disk in the same directory as the'

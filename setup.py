@@ -27,8 +27,8 @@ setup(name='arts_tracking_beams',
       zip_safe=False,
       install_requires=['numpy',
                         'astropy',
-                        'matplotlib',
                         'tqdm',
                         'joblib'],
-      entry_points={'console_scripts': ['arts_create_tracking_beam=arts_tracking_beams.create_tracking_beam:main_with_args']}
+      entry_points={'console_scripts':
+                    ['arts_create_tracking_beam=arts_tracking_beams.create_tracking_beam:main_with_args']}
       )

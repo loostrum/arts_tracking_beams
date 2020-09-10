@@ -156,6 +156,13 @@ class TestCreateTrackingBeam(unittest.TestCase):
         args, kwargs = mocked_main.call_args
         self.assertTrue(hasattr(args[0], 'input_folder'))
         self.assertTrue(args[0].input_folder == folder)
+        # test negative Dec
+        dec = '-10:00:00'
+        create_tracking_beam.sys.argv = [sys.argv[0], '--input_folder', folder, '--ra', '0', '--dec', dec]
+        func()
+        args, kwargs = mocked_main.call_args
+        self.assertTrue(hasattr(args[0], 'dec'))
+        self.assertTrue(args[0].dec == dec)
 
     def test_main(self):
         args = self.get_args()

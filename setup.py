@@ -25,7 +25,7 @@ setup(name='arts_tracking_beams',
       license='Apache Software License 2.0',
       packages=find_packages(),
       zip_safe=False,
-      install_requires=['numpy',
+      install_requires=['numpy>=1.17',
                         'astropy',
                         'tqdm'],
       entry_points={'console_scripts':

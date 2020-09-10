@@ -10,7 +10,7 @@ on the sky over the course of an observation.
 
 ## Dependencies
 * python >= 3.6
-* numpy
+* numpy >= 1.17
 * astropy
 * tqdm
 

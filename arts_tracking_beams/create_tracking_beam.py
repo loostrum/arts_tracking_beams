@@ -414,5 +414,25 @@ def main_with_args():
     parser.add_argument('--verbose', action='store_true',
                         help='Enable verbose logging')
 
+    # ensure a negative dec is not interpreted as option by argparse
+    try:
+        # find the index of the dec argument
+        ind = sys.argv.index('--dec')
+        # get the dec value
+        dec = sys.argv[ind + 1]
+        # if the first character is a minus sign, replace it by an m
+        if dec[0] == '-':
+            sys.argv[ind + 1] = 'm' + dec[1:]
+    except (ValueError, IndexError):
+        # dec not present in argument list or no value for dec given
+        # parse_args will raise errors, no need to do it here
+        pass
+
+    # parse the arguments
     args = parser.parse_args()
+
+    # put the minus sign back in the Dec value
+    if args.dec is not None and args.dec[0] == 'm':
+        args.dec = '-' + args.dec[1:]
+
     main(args)

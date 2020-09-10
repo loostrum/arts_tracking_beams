@@ -15,3 +15,14 @@ script:
   - find . -name "*.py" -exec pycodestyle --ignore E501,W503 {} +
 after_success:
   - codecov
+jobs:
+  include:
+    - stage: deploy
+      python: '3.6'
+      deploy:
+        - provider: pypi
+          username: __token__
+          password: "$PYPI_TOKEN"
+          on:
+            branch: master
+            tags: true

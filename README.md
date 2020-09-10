@@ -1,4 +1,6 @@
 # ARTS tracking beams
+[![DOI](https://zenodo.org/badge/291081079.svg)](https://zenodo.org/badge/latestdoi/291081079)
+[![PyPI version](https://badge.fury.io/py/arts-tracking-beams.svg)](https://badge.fury.io/py/arts-tracking-beams)
 [![Build Status](https://travis-ci.com/loostrum/arts_tracking_beams.svg?branch=master)](https://travis-ci.com/loostrum/arts_tracking_beams)
 [![codecov](https://codecov.io/gh/loostrum/arts_tracking_beams/branch/master/graph/badge.svg)](https://codecov.io/gh/loostrum/arts_tracking_beams)
 

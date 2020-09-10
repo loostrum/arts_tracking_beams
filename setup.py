@@ -31,4 +31,8 @@ setup(name='arts_tracking_beams',
                         'joblib'],
       entry_points={'console_scripts':
                     ['arts_create_tracking_beam=arts_tracking_beams.create_tracking_beam:main_with_args']}
+      classifiers=['License :: OSI Approved :: Apache Software License',
+                   'Programming Language :: Python :: 3',
+                   'Operating System :: OS Independent'],
+      python_requires='>=3.6'
       )

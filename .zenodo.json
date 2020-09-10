@@ -1,0 +1,20 @@
+{
+    "creators": [
+        {
+            "affiliation": "ASTRON/UvA",
+            "name": "Oostrum, Leon",
+            "orcid": "0000-0001-8724-8372"
+        }
+    ],
+    "keywords": [
+        "Astrophysics",
+        "Apertif",
+        "Arts",
+        "Fast Radio Bursts",
+        "Pulsars"
+    ],
+    "license": {
+        "id": "Apache-2.0"
+    },
+    "title": "ARTS tracking beams"
+}

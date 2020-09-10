@@ -3,6 +3,7 @@
 import numpy as np
 import astropy.units as u
 import astropy.constants as const
+from astropy.time import Time
 
 from arts_tracking_beams.tools import radec_to_hadec
 from arts_tracking_beams.constants import WSRT_LOC, ARRAY_ITRF, DISH_ITRF, NTAB, BCQ
@@ -30,6 +31,19 @@ class TrackingBeam:
         :param Time/array t: Time stamp or array of time stamps
         :return: TAB indices, shape (len(t), NTAB)
         """
+
+        # check if t is one value or a list/array
+        self.time_is_array = False
+        self.ntime = None
+        if isinstance(t, np.ndarray) or isinstance(t, list):
+            self.time_is_array = True
+        elif isinstance(t, Time):
+            # if created with Time, the input could be a single Time instances with multiple values, check
+            # with Time.value
+            if hasattr(t.value, '__len__'):
+                self.time_is_array = True
+        if self.time_is_array:
+            self.ntime = len(t)
 
         # get HA, Dec coordinates of phase center and source
         self.ha, self.dec = radec_to_hadec(self.ra0, self.dec0, t)
@@ -65,7 +79,18 @@ class TrackingBeam:
         rot_matrix = np.array([[np.sin(ha), np.cos(ha), 0],
                                [-np.sin(dec) * np.cos(ha), np.sin(dec) * np.sin(ha), np.cos(dec)],
                                [np.cos(dec) * np.cos(ha), -np.cos(dec) * np.sin(ha), np.sin(dec)]])
-        uvw = (rot_matrix @ self.baselines.T)
+
+        uvw = np.matmul(rot_matrix, self.baselines.T)
+        if self.time_is_array:
+            # uvw is a (3, ndish) array, but each value is a Quantity with ntime values
+            # turn into one big Quantity object
+            uvw_old = uvw.copy()
+            ndish = len(self.baselines)
+            uvw = np.zeros((3, ndish, self.ntime)) * u.dimensionless_unscaled
+            for a in range(3):
+                for dish in range(ndish):
+                    uvw[a, dish] = uvw_old[a, dish].value
+            uvw *= uvw_old.unit
         return uvw
 
     def _get_tab_angles(self):
@@ -100,4 +125,7 @@ class TrackingBeam:
         # get pointing shift per tab
         pointing_shift_per_tab = tab_gr / NTAB
         # get TAB index in range [0, NTAB)
+        if self.time_is_array:
+            # add extra axis so output shape is ntime, nsub
+            pointing_shift_per_tab = pointing_shift_per_tab[:, None]
         return np.round((x_src / pointing_shift_per_tab).to(1).value).astype(int) % NTAB

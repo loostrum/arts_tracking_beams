@@ -60,6 +60,17 @@ The script then loads the TAB indices and immediately goes to step 2.
 
 There are a few more settings that can be customized. Run `arts_create_tracking_beam -h` for an overview of all options.
 
-  
+### Creating a synthesised beam
+A synthesised beam (SB) is a type of beam that reorders the TABs as function of frequency, but *not* as function of time.
+A single CB is covered by 71 SBs. Each SB is always made out of the same TABs. The SBs are used in the real-time 
+transient search that ARTS runs. The brightest transients may also be detectable in the archival data, so we here include
+a tool to create the synthesised beams as well. 
+
+The synthesised beam tool, `arts_create_synthesised_beam`, works
+in a very similar fashion as the tracking beam tool. An example command:
+ 
+`arts_create_synthesised_beam --input_folder /path/to/data --sb 35`
+
+Run `arts_create_synthesised_beam -h` for more options.
 
 

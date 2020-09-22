@@ -61,18 +61,13 @@ class TestFitsReader(unittest.TestCase):
             # nchan not divisible by nsub
             tabs = range(7)
             self.reader.read_tabs_to_buffer(start, nsubint, tabs, out['SUBINT'])
-        with self.assertRaises(SystemExit):
-            # not a multiple of 8 channels per subband
-            tabs = range(384)
-            self.reader.read_tabs_to_buffer(start, nsubint, tabs, out['SUBINT'])
 
         # read the same tab to each subband
         tabs = 10
         self.reader.read_tabs_to_buffer(start, nsubint, tabs, out['SUBINT'])
         # input has weights equal to TAB number, check output is the same
         data = out['SUBINT'].data['DAT_WTS'][0]
-        self.assertListEqual(
-            data.astype(int).tolist(), [tabs] * len(data))
+        self.assertListEqual(data.astype(int).tolist(), [tabs] * len(data))
 
         # read different TAB for each subband
         # first put all weights to zero
@@ -85,6 +80,14 @@ class TestFitsReader(unittest.TestCase):
         for i, tab in enumerate(reversed(tabs)):
             weights = data[i * nchan_per_tab:(i + 1) * nchan_per_tab].astype(int).tolist()
             self.assertListEqual(weights, [tab] * len(weights))
+
+        # enable unpacking of bytes to bits by setting channels per subband to not a multiple of 8,
+        # 32 subbands, 384 channels: 12 channels per subband
+        tabs = 5
+        self.reader.read_tabs_to_buffer(start, nsubint, [tabs] * 32, out['SUBINT'])
+        # input has weights equal to TAB number, check output is the same
+        data = out['SUBINT'].data['DAT_WTS'][0]
+        self.assertListEqual(data.astype(int).tolist(), [tabs] * len(data))
 
 
 if __name__ == '__main__':

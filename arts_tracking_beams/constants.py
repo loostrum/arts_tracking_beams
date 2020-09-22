@@ -2,16 +2,22 @@
 #
 # WSRT constants
 
+import os
 import numpy as np
 import astropy.units as u
 from astropy.coordinates import EarthLocation
 
-#: File with definition of CB offsets
-CB_OFFSETS = 'square_39p1.cb_offsets'
+# path to static files
+STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+
+#: File with definition of synthesised beams
+SB_TABLE = os.path.join(STATIC_DIR, 'sbtable-sc4-12tabs-71sbs.txt')
 #: Number of compound beams
 NCB = 40
 #: Number of tied-array beams
 NTAB = 12
+#: Number of synthesised beams
+NSB = 71
 #: CB half-power width
 CB_HPBW = 28.0835088 * u.arcmin
 #: Reference frequency for CB half-power width

@@ -113,7 +113,7 @@ class ARTSFITSReader:
         by setting tabs to an array of TAB indices per subband, lowest frequency first.
 
         :param int subintstart: First subintegration to load
-        :param int nsubint: Number of subintegrations to loadd
+        :param int nsubint: Number of subintegrations to load
         :param int/list tabs: tab to load per subband, from low to high freq (same tab for all freqs if int)
         :param FITS_rec out: output array to store data to
         """
@@ -131,41 +131,80 @@ class ARTSFITSReader:
         if not nchan % nsub == 0:
             self.logger.error(f"Number of channels ({nchan}) is not divisible by requested number of subbands ({nsub})")
             sys.exit(1)
-        # get number of bytes per subband
-        if not (nchan // nsub) % 8 == 0:
-            self.logger.error(f"Number of channels per subband must be a multiple of 8")
-            sys.exit(1)
+
+        # if the number of channels per subbands is not a multiple of 8, the data need to be unpacked from bytes
+        # into the separate bits
+        unpack = not ((nchan // nsub) % 8 == 0)
         nchan_per_subband = (nchan // nsub)
-        nbyte_per_subband = nchan_per_subband // 8
+        if unpack:
+            nbit = 1
+        else:
+            nbit = 8
+        nchunk_per_subband = nchan_per_subband // nbit
 
         nsamp = self.info['nsamp_per_subint']
-        ind = np.zeros((nsamp * nbyte_per_subband), dtype=int)
+        ind = np.zeros((nsamp * nchunk_per_subband), dtype=int)
         # load data of each subband
         # ignore the VerifyWarning that happens because 8 samples are packed into one byte
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', category=VerifyWarning)
-            for subband, tab in enumerate(tabs):
-                # get the file handle for this tab
-                handle = self.file_handles[tab]['SUBINT']
-                # get indices of frequency chunks to extract
-                freq_start = subband * nchan_per_subband
-                freq_end = (subband + 1) * nchan_per_subband
-                # the same in bytes
-                freq_byte_start = subband * nbyte_per_subband
-                freq_byte_end = (subband + 1) * nbyte_per_subband
-                # set weights, scales, offsets for this part of the frequency band
-                for col in ['DAT_WTS', 'DAT_SCL', 'DAT_OFFS']:
-                    # here use normal frequency indices
-                    out.data[col][subintstart:subintstart + nsubint, freq_start:freq_end] = \
-                        handle.data[col][subintstart:subintstart + nsubint, freq_start:freq_end]
-                # we need to extract these indices for each subint, each time sample in that subint
-                # construct array of all samples that need to be extract from a subint
-                for s in range(nsamp):
-                    # nchan // 8 here indicates the total number of bytes of one time step
-                    # use byte indices for frequency as this these are packed data
-                    samp_start = s * (nchan // 8) + freq_byte_start
-                    samp_end = s * (nchan // 8) + freq_byte_end
-                    ind[s * nbyte_per_subband:(s + 1) * nbyte_per_subband] = np.arange(samp_start, samp_end)
-                # now extract the data
-                out.data['DATA'][subintstart:subintstart + nsubint, ind] = \
-                    handle.data['DATA'][subintstart:subintstart + nsubint, ind]
+            if not unpack:
+                # keep bytes as they are, which means we can first process each time sample of a subband,
+                # then move on to the next subband
+                for subband, tab in enumerate(tabs):
+                    # get the file handle for this tab
+                    handle = self.file_handles[tab]['SUBINT']
+                    # get indices of frequency chunks to extract
+                    freq_start = subband * nchan_per_subband
+                    freq_end = (subband + 1) * nchan_per_subband
+                    # the same in chunks (i.e. the bytes)
+                    freq_chunk_start = subband * nchunk_per_subband
+                    freq_chunk_end = (subband + 1) * nchunk_per_subband
+                    # set weights, scales, offsets for this part of the frequency band
+                    for col in ['DAT_WTS', 'DAT_SCL', 'DAT_OFFS']:
+                        # here use normal frequency indices
+                        out.data[col][subintstart:subintstart + nsubint, freq_start:freq_end] = \
+                            handle.data[col][subintstart:subintstart + nsubint, freq_start:freq_end]
+                    # we need to extract these indices for each subint, each time sample in that subint
+                    # construct array of all samples that need to be extract from a subint
+                    for s in range(nsamp):
+                        # nchan // 8 here indicates the total number of bytes of one time step
+                        # use byte indices for frequency as this these are packed data
+                        samp_start = s * (nchan // nbit) + freq_chunk_start
+                        samp_end = s * (nchan // nbit) + freq_chunk_end
+                        ind[s * nchunk_per_subband:(s + 1) * nchunk_per_subband] = np.arange(samp_start, samp_end)
+                    # now extract the data
+                    out.data['DATA'][subintstart:subintstart + nsubint, ind] = \
+                        handle.data['DATA'][subintstart:subintstart + nsubint, ind]
+            else:
+                # the number of channels of one subband cannot be packed into a byte, so we unpack and hold the
+                # data in a temporary array before writing to the output
+                # create an array to hold the data
+                tmpdata = np.zeros((nsubint, nsamp * nchan), dtype=int)
+                # loop over the subbands
+                for subband, tab in enumerate(tabs):
+                    # get the file handle for this tab
+                    handle = self.file_handles[tab]['SUBINT']
+                    # get indices of frequency chunks to extract
+                    freq_start = subband * nchan_per_subband
+                    freq_end = (subband + 1) * nchan_per_subband
+                    # set weights, scales, offsets for this part of the frequency band
+                    for col in ['DAT_WTS', 'DAT_SCL', 'DAT_OFFS']:
+                        # here use normal frequency indices
+                        out.data[col][subintstart:subintstart + nsubint, freq_start:freq_end] = \
+                            handle.data[col][subintstart:subintstart + nsubint, freq_start:freq_end]
+                    # we need to extract these indices for each subint, each time sample in that subint
+                    # construct array of all samples that need to be extract from a subint
+                    for s in range(nsamp):
+                        samp_start = s * (nchan // nbit) + freq_start
+                        samp_end = s * (nchan // nbit) + freq_end
+                        ind[s * nchunk_per_subband:(s + 1) * nchunk_per_subband] = np.arange(samp_start, samp_end)
+
+                    # now extract and unpack the data
+                    tmpdata[:, ind] = np.unpackbits(handle.data['DATA'][subintstart:subintstart + nsubint],
+                                                    bitorder='big').reshape(nsubint, -1)[:, ind]
+
+                # pack and store to the output
+                # packing flattens the array, so first restore the axes
+                out.data['DATA'][subintstart:subintstart + nsubint] = \
+                    np.packbits(tmpdata, bitorder='big').reshape(nsubint, -1)

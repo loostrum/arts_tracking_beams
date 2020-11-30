@@ -1,7 +1,7 @@
 # ARTS tracking beams
 [![DOI](https://zenodo.org/badge/291081079.svg)](https://zenodo.org/badge/latestdoi/291081079)
 [![PyPI version](https://badge.fury.io/py/arts-tracking-beams.svg)](https://badge.fury.io/py/arts-tracking-beams)
-[![Build Status](https://travis-ci.com/loostrum/arts_tracking_beams.svg?branch=master)](https://travis-ci.com/loostrum/arts_tracking_beams)
+![CI](https://github.com/loostrum/arts_tracking_beams/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/loostrum/arts_tracking_beams/branch/master/graph/badge.svg)](https://codecov.io/gh/loostrum/arts_tracking_beams)
 
 The Apertif Radio Transient System (ARTS) archive contains tied-array beam (TAB) data. The TABs have a time-dependent and

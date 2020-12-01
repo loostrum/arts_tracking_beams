@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Synthesised beam tutorial &mdash; ARTS tracking beams 1.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Tracking beam tutorial" href="TB.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> ARTS tracking beams
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="TB.html">Tracking beam tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Synthesised beam tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#choosing-and-downloading-data">Choosing and downloading data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#synthesised-beam-background">Synthesised beam background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-the-synthesised-beams">Creating the synthesised beams</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ARTS tracking beams</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Synthesised beam tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/tutorials/SB.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="synthesised-beam-tutorial">
+<h1>Synthesised beam tutorial<a class="headerlink" href="#synthesised-beam-tutorial" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial, tied-array beam (TAB) data will be downloaded from the Apertif Long Term Archive (ALTA),
+and converted into a set of synthesised beams (SBs). The SBs correct the TABs for their frequency-dependent pointing.
+They are <em>not</em> corrected for the time-dependent orientation of the TABs. Hence, the SB pointing is time-dependent so they
+are suitable for transient searches but not for periodicity searches.</p>
+<div class="section" id="choosing-and-downloading-data">
+<h2>Choosing and downloading data<a class="headerlink" href="#choosing-and-downloading-data" title="Permalink to this headline">¶</a></h2>
+<p>For this tutorial we will use the same data as for the tracking beam tutorial. Please follow the data selection and downloading
+sections of the <a class="reference internal" href="TB.html#tracking-beam-tutorial"><span class="std std-ref">tracking beam tutorial</span></a>.</p>
+</div>
+<div class="section" id="synthesised-beam-background">
+<h2>Synthesised beam background<a class="headerlink" href="#synthesised-beam-background" title="Permalink to this headline">¶</a></h2>
+<p>A set of 71 SBs fully covers one compound beam (CB) when observing on the meridian. At large hour angles, fewer SBs
+are required due to baseline projection effects. The TAB to SB mapping is fixed, meaning that the pointing of a given
+SB depends relative to the CB centre depends on the telescope pointing. Tools to calculate the pointing of an SB
+are in progress.</p>
+<p>It is expected to see a transient in several SBs simultaneously. Because they are made out of 12 TABs, the SBs have sidelobes
+that coincide with the main lobe of an SB offset by an integer multiple of 12. E.g. SB35 has sidelobes that coincide
+with the main lobes of SBs 11, 23, 47, 59. This holds the other way around as well: SBs 11, 23, 47, 59 have a sidelobe
+near the main lobe of SB35. The sidelobes typically suffer from chromatic effects; only the main lobe has broadband sensitivity
+in the pointing direction of the SB.</p>
+<p>Feel free to contact <a class="reference external" href="mailto:oostrum&#37;&#52;&#48;astron&#46;nl">Leon Oostrum</a> if you have questions about the synthesised beams.</p>
+</div>
+<div class="section" id="creating-the-synthesised-beams">
+<h2>Creating the synthesised beams<a class="headerlink" href="#creating-the-synthesised-beams" title="Permalink to this headline">¶</a></h2>
+<p>The synthesised beam script currently creates one SB at a time. Generating all 71 SBs can be done with a simple bash loop:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for sb in {0..70}; do
+  arts_create_synthesised_beam --sb $sb --input_folder data/
+done
+</pre></div>
+</div>
+<p>This generates 71 files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(py36) leon@zeus:SB$ ls *.fits
+ARTS190406012_CB35_SB00.fits  ARTS190406012_CB35_SB15.fits  ARTS190406012_CB35_SB30.fits  ARTS190406012_CB35_SB45.fits  ARTS190406012_CB35_SB60.fits
+ARTS190406012_CB35_SB01.fits  ARTS190406012_CB35_SB16.fits  ARTS190406012_CB35_SB31.fits  ARTS190406012_CB35_SB46.fits  ARTS190406012_CB35_SB61.fits
+ARTS190406012_CB35_SB02.fits  ARTS190406012_CB35_SB17.fits  ARTS190406012_CB35_SB32.fits  ARTS190406012_CB35_SB47.fits  ARTS190406012_CB35_SB62.fits
+ARTS190406012_CB35_SB03.fits  ARTS190406012_CB35_SB18.fits  ARTS190406012_CB35_SB33.fits  ARTS190406012_CB35_SB48.fits  ARTS190406012_CB35_SB63.fits
+ARTS190406012_CB35_SB04.fits  ARTS190406012_CB35_SB19.fits  ARTS190406012_CB35_SB34.fits  ARTS190406012_CB35_SB49.fits  ARTS190406012_CB35_SB64.fits
+ARTS190406012_CB35_SB05.fits  ARTS190406012_CB35_SB20.fits  ARTS190406012_CB35_SB35.fits  ARTS190406012_CB35_SB50.fits  ARTS190406012_CB35_SB65.fits
+ARTS190406012_CB35_SB06.fits  ARTS190406012_CB35_SB21.fits  ARTS190406012_CB35_SB36.fits  ARTS190406012_CB35_SB51.fits  ARTS190406012_CB35_SB66.fits
+ARTS190406012_CB35_SB07.fits  ARTS190406012_CB35_SB22.fits  ARTS190406012_CB35_SB37.fits  ARTS190406012_CB35_SB52.fits  ARTS190406012_CB35_SB67.fits
+ARTS190406012_CB35_SB08.fits  ARTS190406012_CB35_SB23.fits  ARTS190406012_CB35_SB38.fits  ARTS190406012_CB35_SB53.fits  ARTS190406012_CB35_SB68.fits
+ARTS190406012_CB35_SB09.fits  ARTS190406012_CB35_SB24.fits  ARTS190406012_CB35_SB39.fits  ARTS190406012_CB35_SB54.fits  ARTS190406012_CB35_SB69.fits
+ARTS190406012_CB35_SB10.fits  ARTS190406012_CB35_SB25.fits  ARTS190406012_CB35_SB40.fits  ARTS190406012_CB35_SB55.fits  ARTS190406012_CB35_SB70.fits
+ARTS190406012_CB35_SB11.fits  ARTS190406012_CB35_SB26.fits  ARTS190406012_CB35_SB41.fits  ARTS190406012_CB35_SB56.fits
+ARTS190406012_CB35_SB12.fits  ARTS190406012_CB35_SB27.fits  ARTS190406012_CB35_SB42.fits  ARTS190406012_CB35_SB57.fits
+ARTS190406012_CB35_SB13.fits  ARTS190406012_CB35_SB28.fits  ARTS190406012_CB35_SB43.fits  ARTS190406012_CB35_SB58.fits
+ARTS190406012_CB35_SB14.fits  ARTS190406012_CB35_SB29.fits  ARTS190406012_CB35_SB44.fits  ARTS190406012_CB35_SB59.fits
+</pre></div>
+</div>
+<p>These files can now be searched for single pulses with your favourite pulsar tool.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The data are one bit per sample, which not every tool understands natively.</p>
+</div>
+<p>As noted in the tracking beam tutorial, these data contain a known pulsar, PSR J0358+5413, at a DM of 57.14 pc/cc.
+Dedispersing all SBs to that DM, and searching for single pulses above a S/N of 8 clearly shows the periodicity of 12 SBs:</p>
+<a class="reference internal image-reference" href="../_images/J0358+5413_ncand_vs_sb.png"><img alt="Number of candidates per SB" src="../_images/J0358+5413_ncand_vs_sb.png" style="width: 600px;" /></a>
+<p>In order to determine the “real” SB the source was located in, proper localisation analysis should be run. For that,
+a separate package is available: <a class="reference external" href="https://github.com/loostrum/arts_localisation">ARTS localisation</a>. In this case,
+the SB with the highest number of candidates is probably the one where the source was located in. Let’s make a figure
+of the candidate with the highest S/N in that SB, SB 15:</p>
+<a class="reference internal image-reference" href="../_images/J0358+5413_single_pulse.png"><img alt="Single pulse from PSR J0358+5413" src="../_images/J0358+5413_single_pulse.png" style="width: 600px;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above figure was made with PRESTO’s <cite>waterfaller.py</cite>. To make that script work with the ARTS 1-bit files, <cite>psrfits.py</cite>
+needs to be modified. It already contains code to unpack 4-bit and 2-bit data. Add two lines to unpack
+1-bit data so the complete section looks like something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbits</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">:</span> <span class="c1"># Unpack the bytes data</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbits</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">sdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unpackbits</span><span class="p">(</span><span class="n">sdata</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbits</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">sdata</span> <span class="o">=</span> <span class="n">unpack_4bit</span><span class="p">(</span><span class="n">sdata</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbits</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">sdata</span> <span class="o">=</span> <span class="n">unpack_2bit</span><span class="p">(</span><span class="n">sdata</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">shp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsamp_per_subint</span><span class="p">)</span> <span class="ow">and</span> \
+         <span class="p">(</span><span class="n">shp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">npoln</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbits</span> <span class="o">//</span> <span class="mi">8</span><span class="p">):</span>
+        <span class="n">sdata</span> <span class="o">=</span> <span class="n">sdata</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsamp_per_subint</span><span class="p">,</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">npoln</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbits</span> <span class="o">//</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="TB.html" class="btn btn-neutral float-left" title="Tracking beam tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Leon Oostrum
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

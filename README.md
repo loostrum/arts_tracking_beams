@@ -6,7 +6,8 @@
 
 The Apertif Radio Transient System (ARTS) archive contains tied-array beam (TAB) data. The TABs have a time-dependent and
 frequency-dependent pointing. This tool is able to convert the TAB data to a tracking beam (TB), which tracks a fixed point
-on the sky over the course of an observation. 
+on the sky over the course of an observation. Additionally, it can convert TAB data to Synthesised Beams (SBs),
+which are suitable for transient searches.
 
 ## Dependencies
 * python >= 3.6
@@ -24,6 +25,7 @@ To install the latest master branch:
 `pip install git+https://github.com/loostrum/arts_tracking_beams`
 
 ## Usage
+Basic usage of this package is described below. Tutorials are available at https://loostrum.github.io/arts_tracking_beams.
 
 ### Input data
 First download the data set of interest from the Apertif Long-Term Archive (ALTA). Tools to find which pulsars are in the 
@@ -35,7 +37,7 @@ The file `ARTS200102003_CB00_TAB00.fits` would be the observation identified by 
 (that is, the third observation on January 2nd, 2020), CB zero, TAB zero. A TB is created from the TABs of a single CB.
 
 ### Creating a tracking beam
-The TB is created from the TAB data with `arts_create_tracking_beam`. 
+A tracking beam (TB) is created from the TAB data with `arts_create_tracking_beam`. 
 
 The simplest use case is to create a tracking beam
 from a folder which contains only one data set (i.e. the TABs of one CB of one observation), for a source with known 

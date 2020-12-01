@@ -25,6 +25,7 @@ To install the latest master branch:
 `pip install git+https://github.com/loostrum/arts_tracking_beams`
 
 ## Usage
+Basic usage of this package is described below. Tutorials are available at https://loostrum.github.io/arts_tracking_beams.
 
 ### Input data
 First download the data set of interest from the Apertif Long-Term Archive (ALTA). Tools to find which pulsars are in the 

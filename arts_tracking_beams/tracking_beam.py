@@ -99,7 +99,7 @@ class TrackingBeam:
         tab_proj = np.abs(np.arcsin(ww / baseline_lengths))
 
         # take median over dishes (not mean, because values for RT8 can be close to zero divided by zero)
-        # not needed for tab_rot because it does not use uvw 
+        # not needed for tab_rot because it does not use uvw
         tab_proj = np.median(tab_proj, axis=0)
 
         return tab_rot, tab_proj

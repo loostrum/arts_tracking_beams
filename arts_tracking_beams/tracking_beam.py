@@ -99,8 +99,8 @@ class TrackingBeam:
         tab_proj = np.abs(np.arcsin(ww / baseline_lengths))
 
         # take median over dishes (not mean, because values for RT8 can be close to zero divided by zero)
-        tab_rot = np.median(tab_rot)
-        tab_proj = np.median(tab_proj)
+        # not needed for tab_rot because it does not use uvw 
+        tab_proj = np.median(tab_proj, axis=0)
 
         return tab_rot, tab_proj
 
@@ -114,7 +114,10 @@ class TrackingBeam:
         # find position in grating response
         # first get grating distance, use arcsin to automaticaly get units
         # though small angle approximation should hold here
-        tab_gr = np.arcsin(const.c / (self.f_sub * BCQ * np.cos(self.tab_proj)))
+        if self.time_is_array:
+            tab_gr = np.arcsin(const.c / (self.f_sub[None, :] * BCQ * np.cos(self.tab_proj)[:, None]))
+        else:
+            tab_gr = np.arcsin(const.c / (self.f_sub * BCQ * np.cos(self.tab_proj)))
         # get pointing shift per tab
         pointing_shift_per_tab = tab_gr / NTAB
         # get TAB index in range [0, NTAB)

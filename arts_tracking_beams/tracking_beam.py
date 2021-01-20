@@ -76,21 +76,14 @@ class TrackingBeam:
         """
         ha = self.ha
         dec = self.dec
-        rot_matrix = np.array([[np.sin(ha), np.cos(ha), 0],
+        rot_matrix = np.array([[np.sin(ha), np.cos(ha), np.zeros(ha.shape) * u.dimensionless_unscaled],
                                [-np.sin(dec) * np.cos(ha), np.sin(dec) * np.sin(ha), np.cos(dec)],
                                [np.cos(dec) * np.cos(ha), -np.cos(dec) * np.sin(ha), np.sin(dec)]])
 
-        uvw = np.matmul(rot_matrix, self.baselines.T)
+        uvw = np.tensordot(rot_matrix, self.baselines, axes=(1, 1))
         if self.time_is_array:
-            # uvw is a (3, ndish) array, but each value is a Quantity with ntime values
-            # turn into one big Quantity object
-            uvw_old = uvw.copy()
-            ndish = len(self.baselines)
-            uvw = np.zeros((3, ndish, self.ntime)) * u.dimensionless_unscaled
-            for a in range(3):
-                for dish in range(ndish):
-                    uvw[a, dish] = uvw_old[a, dish].value
-            uvw *= uvw_old.unit
+            # with tensordot the time and dish axes are flipped
+            uvw = np.swapaxes(uvw, 1, 2)
         return uvw
 
     def _get_tab_angles(self):

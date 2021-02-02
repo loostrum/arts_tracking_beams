@@ -23,7 +23,7 @@ with the main lobes of SBs 11, 23, 47, 59. This holds the other way around as we
 near the main lobe of SB35. The sidelobes typically suffer from chromatic effects; only the main lobe has broadband sensitivity
 in the pointing direction of the SB.
 
-Feel free to contact `Leon Oostrum <oostrum@astron.nl>`_ if you have questions about the synthesised beams.
+Feel free to contact `Leon Oostrum <l.oostrum@esciencecenter.nl>`_ if you have questions about the synthesised beams.
 
 Creating the synthesised beams
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

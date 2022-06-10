@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -73,18 +74,18 @@
            <div itemprop="articleBody">
              
   <section id="synthesised-beam-tutorial">
-<h1>Synthesised beam tutorial<a class="headerlink" href="#synthesised-beam-tutorial" title="Permalink to this headline"></a></h1>
+<h1>Synthesised beam tutorial<a class="headerlink" href="#synthesised-beam-tutorial" title="Permalink to this heading"></a></h1>
 <p>In this tutorial, tied-array beam (TAB) data will be downloaded from the Apertif Long Term Archive (ALTA),
 and converted into a set of synthesised beams (SBs). The SBs correct the TABs for their frequency-dependent pointing.
 They are <em>not</em> corrected for the time-dependent orientation of the TABs. Hence, the SB pointing is time-dependent so they
 are suitable for transient searches but not for periodicity searches.</p>
 <section id="choosing-and-downloading-data">
-<h2>Choosing and downloading data<a class="headerlink" href="#choosing-and-downloading-data" title="Permalink to this headline"></a></h2>
+<h2>Choosing and downloading data<a class="headerlink" href="#choosing-and-downloading-data" title="Permalink to this heading"></a></h2>
 <p>For this tutorial we will use the same data as for the tracking beam tutorial. Please follow the data selection and downloading
 sections of the <a class="reference internal" href="TB.html#tracking-beam-tutorial"><span class="std std-ref">tracking beam tutorial</span></a>.</p>
 </section>
 <section id="synthesised-beam-background">
-<h2>Synthesised beam background<a class="headerlink" href="#synthesised-beam-background" title="Permalink to this headline"></a></h2>
+<h2>Synthesised beam background<a class="headerlink" href="#synthesised-beam-background" title="Permalink to this heading"></a></h2>
 <p>A set of 71 SBs fully covers one compound beam (CB) when observing on the meridian. At large hour angles, fewer SBs
 are required due to baseline projection effects. The TAB to SB mapping is fixed, meaning that the pointing of a given
 SB depends relative to the CB centre depends on the telescope pointing. Tools to calculate the pointing of an SB
@@ -97,7 +98,7 @@ in the pointing direction of the SB.</p>
 <p>Feel free to contact <a class="reference external" href="mailto:l&#46;oostrum&#37;&#52;&#48;esciencecenter&#46;nl">Leon Oostrum</a> if you have questions about the synthesised beams.</p>
 </section>
 <section id="creating-the-synthesised-beams">
-<h2>Creating the synthesised beams<a class="headerlink" href="#creating-the-synthesised-beams" title="Permalink to this headline"></a></h2>
+<h2>Creating the synthesised beams<a class="headerlink" href="#creating-the-synthesised-beams" title="Permalink to this heading"></a></h2>
 <p>The synthesised beam script currently creates one SB at a time. Generating all 71 SBs can be done with a simple bash loop:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for sb in {0..70}; do
   arts_create_synthesised_beam --sb $sb --input_folder data/

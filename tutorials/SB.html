@@ -17,6 +17,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -62,8 +63,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Synthesised beam tutorial</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Synthesised beam tutorial</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/tutorials/SB.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -131,12 +132,12 @@ ARTS190406012_CB35_SB14.fits  ARTS190406012_CB35_SB29.fits  ARTS190406012_CB35_S
 </div>
 <p>As noted in the tracking beam tutorial, these data contain a known pulsar, PSR J0358+5413, at a DM of 57.14 pc/cc.
 Dedispersing all SBs to that DM, and searching for single pulses above a S/N of 8 clearly shows the periodicity of 12 SBs:</p>
-<a class="reference internal image-reference" href="../_images/J0358+5413_ncand_vs_sb.png"><img alt="Number of candidates per SB" src="../_images/J0358+5413_ncand_vs_sb.png" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="../_images/J0358+5413_ncand_vs_sb.png"><img alt="Number of candidates per SB" src="../_images/J0358%2B5413_ncand_vs_sb.png" style="width: 600px;" /></a>
 <p>In order to determine the “real” SB the source was located in, proper localisation analysis should be run. For that,
 a separate package is available: <a class="reference external" href="https://github.com/loostrum/arts_localisation">ARTS localisation</a>. In this case,
 the SB with the highest number of candidates is probably the one where the source was located in. Let’s make a figure
 of the candidate with the highest S/N in that SB, SB 15:</p>
-<a class="reference internal image-reference" href="../_images/J0358+5413_single_pulse.png"><img alt="Single pulse from PSR J0358+5413" src="../_images/J0358+5413_single_pulse.png" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="../_images/J0358+5413_single_pulse.png"><img alt="Single pulse from PSR J0358+5413" src="../_images/J0358%2B5413_single_pulse.png" style="width: 600px;" /></a>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The above figure was made with PRESTO’s <cite>waterfaller.py</cite>. To make that script work with the ARTS 1-bit files, <cite>psrfits.py</cite>

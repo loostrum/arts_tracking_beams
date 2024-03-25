@@ -1,93 +1,50 @@
-
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Tracking beam tutorial &mdash; ARTS tracking beams 1.3 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b941d5e4" />
 
   
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=c55cb9cb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Synthesised beam tutorial" href="SB.html" />
     <link rel="prev" title="ARTS tracking beams" href="../index.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> ARTS tracking beams
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            ARTS tracking beams
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tracking beam tutorial</a><ul>
@@ -99,73 +56,32 @@
 <li class="toctree-l1"><a class="reference internal" href="SB.html">Synthesised beam tutorial</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">ARTS tracking beams</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Tracking beam tutorial</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tracking beam tutorial</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/tutorials/TB.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="tracking-beam-tutorial">
-<h1>Tracking beam tutorial<a class="headerlink" href="#tracking-beam-tutorial" title="Permalink to this heading">¶</a></h1>
+<h1>Tracking beam tutorial<a class="headerlink" href="#tracking-beam-tutorial" title="Link to this heading"></a></h1>
 <p>In this tutorial, tied-array beam (TAB) data will be downloaded from the Apertif Long Term Archive (ALTA),
 and converted into a tracking beam (TB) that tracks a known pulsar over the entire observation.
 The TB corrects for two effects:</p>
@@ -174,7 +90,7 @@ The TB corrects for two effects:</p>
 <li><p>The time-dependent rotation of the TABs w.r.t. the RA-Dec frame.</p></li>
 </ul>
 <section id="choosing-a-data-set">
-<h2>Choosing a data set<a class="headerlink" href="#choosing-a-data-set" title="Permalink to this heading">¶</a></h2>
+<h2>Choosing a data set<a class="headerlink" href="#choosing-a-data-set" title="Link to this heading"></a></h2>
 <p>An overview of public data can be found on the <a class="reference external" href="https://alta.astron.nl">ALTA website</a>. In the upper left
 corner of that page, click on “Science”. Then select the “Science Verification Campaign 2019 (Time Domain)”
 data release from the drop-down menu in the upper right corner. For this tutorial, we will use the observation of field
@@ -191,7 +107,7 @@ PSR J0358+5413 in CB35, separation from CB centre: 12.61&quot;
 </div>
 </section>
 <section id="downloading-data">
-<h2>Downloading data<a class="headerlink" href="#downloading-data" title="Permalink to this heading">¶</a></h2>
+<h2>Downloading data<a class="headerlink" href="#downloading-data" title="Link to this heading"></a></h2>
 <p>The data can be downloaded from the ALTA web interface, but also using a command line tool from <cite>arts_tools</cite>
 (total size is about 3.6 GB):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">arts_download_from_alta</span> <span class="o">--</span><span class="n">release</span> <span class="n">SVC</span> <span class="o">--</span><span class="n">taskid</span> <span class="mi">190406012</span> <span class="o">--</span><span class="n">cbs</span> <span class="mi">35</span> <span class="o">--</span><span class="n">output_folder</span> <span class="n">data</span><span class="o">/</span> <span class="o">--</span><span class="n">verbose</span>
@@ -207,7 +123,7 @@ ARTS190406012_CB35_TAB02.fits  ARTS190406012_CB35_TAB05.fits  ARTS190406012_CB35
 </div>
 </section>
 <section id="creating-the-tracking-beam">
-<h2>Creating the tracking beam<a class="headerlink" href="#creating-the-tracking-beam" title="Permalink to this heading">¶</a></h2>
+<h2>Creating the tracking beam<a class="headerlink" href="#creating-the-tracking-beam" title="Link to this heading"></a></h2>
 <p>As there is only one data set in the data folder, creating a TB is now very straightforward:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(py36) leon@zeus:TB$ arts_create_tracking_beam  --source &quot;PSR J0358+5413&quot; --input_folder data
 </pre></div>
@@ -233,50 +149,33 @@ to track the given pulsar.</p>
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="SB.html" class="btn btn-neutral float-right" title="Synthesised beam tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../index.html" class="btn btn-neutral float-left" title="ARTS tracking beams" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="SB.html" class="btn btn-neutral float-right" title="Synthesised beam tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Leon Oostrum.
-
-    </p>
+    <p>&#169; Copyright 2020, Leon Oostrum.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -1,92 +1,49 @@
-
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
-  <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Synthesised beam tutorial &mdash; ARTS tracking beams 1.3 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=b941d5e4" />
 
   
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=c55cb9cb"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="Tracking beam tutorial" href="TB.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home"> ARTS tracking beams
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            ARTS tracking beams
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="TB.html">Tracking beam tutorial</a></li>
@@ -98,84 +55,43 @@
 </li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">ARTS tracking beams</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Synthesised beam tutorial</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Synthesised beam tutorial</li>
       <li class="wy-breadcrumbs-aside">
-        
-          
             <a href="../_sources/tutorials/SB.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="synthesised-beam-tutorial">
-<h1>Synthesised beam tutorial<a class="headerlink" href="#synthesised-beam-tutorial" title="Permalink to this heading">¶</a></h1>
+<h1>Synthesised beam tutorial<a class="headerlink" href="#synthesised-beam-tutorial" title="Link to this heading"></a></h1>
 <p>In this tutorial, tied-array beam (TAB) data will be downloaded from the Apertif Long Term Archive (ALTA),
 and converted into a set of synthesised beams (SBs). The SBs correct the TABs for their frequency-dependent pointing.
 They are <em>not</em> corrected for the time-dependent orientation of the TABs. Hence, the SB pointing is time-dependent so they
 are suitable for transient searches but not for periodicity searches.</p>
 <section id="choosing-and-downloading-data">
-<h2>Choosing and downloading data<a class="headerlink" href="#choosing-and-downloading-data" title="Permalink to this heading">¶</a></h2>
+<h2>Choosing and downloading data<a class="headerlink" href="#choosing-and-downloading-data" title="Link to this heading"></a></h2>
 <p>For this tutorial we will use the same data as for the tracking beam tutorial. Please follow the data selection and downloading
 sections of the <a class="reference internal" href="TB.html#tracking-beam-tutorial"><span class="std std-ref">tracking beam tutorial</span></a>.</p>
 </section>
 <section id="synthesised-beam-background">
-<h2>Synthesised beam background<a class="headerlink" href="#synthesised-beam-background" title="Permalink to this heading">¶</a></h2>
+<h2>Synthesised beam background<a class="headerlink" href="#synthesised-beam-background" title="Link to this heading"></a></h2>
 <p>A set of 71 SBs fully covers one compound beam (CB) when observing on the meridian. At large hour angles, fewer SBs
 are required due to baseline projection effects. The TAB to SB mapping is fixed, meaning that the pointing of a given
 SB depends relative to the CB centre depends on the telescope pointing. Tools to calculate the pointing of an SB
@@ -188,7 +104,7 @@ in the pointing direction of the SB.</p>
 <p>Feel free to contact <a class="reference external" href="mailto:l&#46;oostrum&#37;&#52;&#48;esciencecenter&#46;nl">Leon Oostrum</a> if you have questions about the synthesised beams.</p>
 </section>
 <section id="creating-the-synthesised-beams">
-<h2>Creating the synthesised beams<a class="headerlink" href="#creating-the-synthesised-beams" title="Permalink to this heading">¶</a></h2>
+<h2>Creating the synthesised beams<a class="headerlink" href="#creating-the-synthesised-beams" title="Link to this heading"></a></h2>
 <p>The synthesised beam script currently creates one SB at a time. Generating all 71 SBs can be done with a simple bash loop:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>for sb in {0..70}; do
   arts_create_synthesised_beam --sb $sb --input_folder data/
@@ -251,49 +167,32 @@ needs to be modified. It already contains code to unpack 4-bit and 2-bit data. A
 
 
            </div>
-           
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="TB.html" class="btn btn-neutral float-left" title="Tracking beam tutorial" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020, Leon Oostrum.
-
-    </p>
+    <p>&#169; Copyright 2020, Leon Oostrum.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

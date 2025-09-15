@@ -21,7 +21,7 @@ def get_tabs_from_sb(sb):
     :return: TAB indices (array)
     """
     if sb < 0 or sb >= NSB:
-        logging.error(f'Synthesised beam index ({sb:02d}) out of range, must be between 0 and {NSB-1}')
+        logging.error(f'Synthesised beam index ({sb:02d}) out of range, must be between 0 and {NSB - 1}')
         sys.exit(1)
 
     # load the SB table
